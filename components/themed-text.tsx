@@ -1,60 +1,58 @@
-import { StyleSheet, Text, type TextProps } from 'react-native';
+import { StyleSheet, Text, type TextProps } from "react-native";
 
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColor } from "@/hooks/use-app-theme";
+
+type TextVariant = "body" | "muted" | "label" | "title" | "subtitle" | "button";
 
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
   darkColor?: string;
-  type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link';
+  variant?: TextVariant;
 };
 
 export function ThemedText({
   style,
   lightColor,
   darkColor,
-  type = 'default',
-  ...rest
+  variant = "body",
+  ...props
 }: ThemedTextProps) {
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
+  const color = useThemeColor(variant === "muted" ? "textMuted" : "text", {
+    light: lightColor,
+    dark: darkColor,
+  });
 
-  return (
-    <Text
-      style={[
-        { color },
-        type === 'default' ? styles.default : undefined,
-        type === 'title' ? styles.title : undefined,
-        type === 'defaultSemiBold' ? styles.defaultSemiBold : undefined,
-        type === 'subtitle' ? styles.subtitle : undefined,
-        type === 'link' ? styles.link : undefined,
-        style,
-      ]}
-      {...rest}
-    />
-  );
+  return <Text style={[styles[variant], { color }, style]} {...props} />;
 }
 
 const styles = StyleSheet.create({
-  default: {
+  body: {
     fontSize: 16,
     lineHeight: 24,
   },
-  defaultSemiBold: {
-    fontSize: 16,
-    lineHeight: 24,
-    fontWeight: '600',
+  muted: {
+    fontSize: 15,
+    lineHeight: 22,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: "600",
+    letterSpacing: 0.2,
+    textTransform: "uppercase",
   },
   title: {
     fontSize: 32,
-    fontWeight: 'bold',
-    lineHeight: 32,
+    lineHeight: 38,
+    fontWeight: "700",
   },
   subtitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    lineHeight: 28,
+    fontWeight: "600",
   },
-  link: {
-    lineHeight: 30,
+  button: {
     fontSize: 16,
-    color: '#0a7ea4',
+    lineHeight: 20,
+    fontWeight: "600",
   },
 });

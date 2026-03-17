@@ -1,53 +1,67 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
+import { verticalScale } from "@/utils/styling";
 
-import { Platform } from 'react-native';
-
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
-
-export const Colors = {
+export const themeColors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    background: "#F7F8FC",
+    surface: "#FFFFFF",
+    surfaceMuted: "#EEF2FF",
+    text: "#111827",
+    textMuted: "#6B7280",
+    primary: "#0F766E",
+    primaryMuted: "#CCFBF1",
+    onPrimary: "#F8FAFC",
+    border: "#D9E0EC",
+    tabIconDefault: "#94A3B8",
+    tabIconSelected: "#0F766E",
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    background: "#0B1220",
+    surface: "#111827",
+    surfaceMuted: "#172036",
+    text: "#F8FAFC",
+    textMuted: "#94A3B8",
+    primary: "#2DD4BF",
+    primaryMuted: "#123B39",
+    onPrimary: "#042F2E",
+    border: "#243247",
+    tabIconDefault: "#64748B",
+    tabIconSelected: "#2DD4BF",
   },
+} as const;
+
+export type ThemeName = keyof typeof themeColors;
+export type ThemeColors = (typeof themeColors)[ThemeName];
+
+export const spacingY = {
+  _5: verticalScale(5),
+  _7: verticalScale(7),
+  _10: verticalScale(10),
+  _12: verticalScale(12),
+  _15: verticalScale(15),
+  _17: verticalScale(17),
+  _20: verticalScale(20),
+  _25: verticalScale(25),
+  _30: verticalScale(30),
+  _35: verticalScale(35),
+  _40: verticalScale(40),
+  _50: verticalScale(50),
+  _60: verticalScale(60),
 };
 
-export const Fonts = Platform.select({
-  ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: 'ui-monospace',
-  },
-  default: {
-    sans: 'normal',
-    serif: 'serif',
-    rounded: 'normal',
-    mono: 'monospace',
-  },
-  web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-    serif: "Georgia, 'Times New Roman', serif",
-    rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
-    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
-  },
-});
+export const radius = {
+  _3: verticalScale(3),
+  _6: verticalScale(6),
+  _10: verticalScale(10),
+  _12: verticalScale(12),
+  _15: verticalScale(15),
+  _17: verticalScale(17),
+  _20: verticalScale(20),
+  _30: verticalScale(30),
+  _40: verticalScale(40),
+  _50: verticalScale(50),
+  _60: verticalScale(60),
+  _70: verticalScale(70),
+  _80: verticalScale(80),
+  _90: verticalScale(90),
+  full: 200,
+};
