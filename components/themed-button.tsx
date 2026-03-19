@@ -9,6 +9,7 @@ import {
 
 import { ThemedText } from "@/components/themed-text";
 import { useAppTheme } from "@/hooks/use-app-theme";
+import { verticalScale } from "@/utils/styling";
 
 type ButtonVariant = "primary" | "secondary";
 
@@ -29,9 +30,18 @@ export function ThemedButton({
 }: ThemedButtonProps) {
   const { colors } = useAppTheme();
 
-  const backgroundColor = variant === "primary" ? colors.primary : colors.surface;
-  const borderColor = variant === "primary" ? colors.primary : colors.border;
-  const textColor = variant === "primary" ? colors.onPrimary : colors.text;
+  const palette =
+    variant === "primary"
+      ? {
+          backgroundColor: colors.primary,
+          borderColor: colors.primary,
+          textColor: colors.onPrimary,
+        }
+      : {
+          backgroundColor: colors.surface,
+          borderColor: colors.border,
+          textColor: colors.text,
+        };
 
   return (
     <Pressable
@@ -40,8 +50,8 @@ export function ThemedButton({
       style={({ pressed }) => [
         styles.base,
         {
-          backgroundColor,
-          borderColor,
+          backgroundColor: palette.backgroundColor,
+          borderColor: palette.borderColor,
           opacity: disabled ? 0.55 : pressed ? 0.82 : 1,
         },
         style,
@@ -50,8 +60,8 @@ export function ThemedButton({
     >
       <ThemedText
         variant="button"
-        lightColor={textColor}
-        darkColor={textColor}
+        lightColor={palette.textColor}
+        darkColor={palette.textColor}
         style={labelStyle}
       >
         {label}
@@ -62,7 +72,7 @@ export function ThemedButton({
 
 const styles = StyleSheet.create({
   base: {
-    minHeight: 52,
+    minHeight: verticalScale(52),
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 16,

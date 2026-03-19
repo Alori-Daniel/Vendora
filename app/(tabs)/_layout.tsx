@@ -1,5 +1,6 @@
 import { Tabs } from "expo-router";
 import React from "react";
+import { Ionicons } from "@expo/vector-icons";
 
 import { useAppTheme } from "@/hooks/use-app-theme";
 
@@ -18,6 +19,9 @@ export default function TabLayout() {
         tabBarStyle: {
           backgroundColor: colors.surface,
           borderTopColor: colors.border,
+          height: 82,
+          paddingBottom: 10,
+          paddingTop: 10,
         },
         tabBarLabelStyle: {
           fontSize: 12,
@@ -28,13 +32,37 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: "Dashboard",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons color={color} name="grid-outline" size={size} />
+          ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="orders"
         options={{
-          title: "Explore",
+          title: "Orders",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons color={color} name="receipt-outline" size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="customers"
+        options={{
+          title: "Customers",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons color={color} name="people-outline" size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="more"
+        options={{
+          title: "More",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons color={color} name="apps-outline" size={size} />
+          ),
         }}
       />
     </Tabs>

@@ -1,8 +1,16 @@
 import { StyleSheet, Text, type TextProps } from "react-native";
 
 import { useThemeColor } from "@/hooks/use-app-theme";
+import { verticalScale } from "@/utils/styling";
 
-type TextVariant = "body" | "muted" | "label" | "title" | "subtitle" | "button";
+type TextVariant =
+  | "body"
+  | "muted"
+  | "label"
+  | "title"
+  | "subtitle"
+  | "button"
+  | "caption";
 
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
@@ -28,11 +36,11 @@ export function ThemedText({
 const styles = StyleSheet.create({
   body: {
     fontSize: 16,
-    lineHeight: 24,
+    lineHeight: verticalScale(24),
   },
   muted: {
     fontSize: 15,
-    lineHeight: 22,
+    lineHeight: verticalScale(22),
   },
   label: {
     fontSize: 14,
@@ -42,17 +50,21 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
-    lineHeight: 38,
+    lineHeight: verticalScale(38),
     fontWeight: "700",
   },
   subtitle: {
     fontSize: 20,
-    lineHeight: 28,
+    lineHeight: verticalScale(28),
     fontWeight: "600",
   },
   button: {
     fontSize: 16,
-    lineHeight: 20,
+    lineHeight: verticalScale(20),
     fontWeight: "600",
+  },
+  caption: {
+    fontSize: 13,
+    lineHeight: verticalScale(18),
   },
 });
