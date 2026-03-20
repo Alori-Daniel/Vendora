@@ -1,4 +1,4 @@
-import { useRouter, useRootNavigationState, useSegments } from "expo-router";
+import { useRootNavigationState, useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
 
 import { useAppStore } from "@/stores/app-store";
@@ -32,8 +32,8 @@ export function AuthGate() {
     const firstSegment = segments[0];
     const inAuth = firstSegment === "auth";
     const inOnboarding = firstSegment === "onboarding";
-    const inProtectedRoute = Boolean(firstSegment) &&
-      protectedRootSegments.has(firstSegment);
+    const inProtectedRoute =
+      Boolean(firstSegment) && protectedRootSegments.has(firstSegment);
 
     if (!session) {
       if (inProtectedRoute || inOnboarding) {
