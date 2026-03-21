@@ -23,6 +23,7 @@ type ScreenShellProps = {
   headerAccessory?: ReactNode;
   scrollable?: boolean;
   contentContainerStyle?: StyleProp<ViewStyle>;
+  isPadding?: boolean;
   children: ReactNode;
 };
 
@@ -30,6 +31,7 @@ export function ScreenShell({
   title,
   subtitle,
   eyebrow,
+  isPadding = true,
   withBackButton = false,
   headerAccessory,
   scrollable = true,
@@ -38,55 +40,63 @@ export function ScreenShell({
 }: ScreenShellProps) {
   const { colors } = useAppTheme();
 
-  const header = (title || subtitle || eyebrow || withBackButton || headerAccessory) ? (
-    <View style={styles.header}>
-      <View style={styles.headerMain}>
-        {withBackButton ? (
-          <Pressable
-            accessibilityRole="button"
-            onPress={() => {
-              if (router.canGoBack()) {
-                router.back();
-                return;
-              }
+  const header =
+    title || subtitle || eyebrow || withBackButton || headerAccessory ? (
+      <View style={styles.header}>
+        <View style={styles.headerMain}>
+          {withBackButton ? (
+            <Pressable
+              accessibilityRole="button"
+              onPress={() => {
+                if (router.canGoBack()) {
+                  router.back();
+                  return;
+                }
 
-              router.replace("/");
-            }}
-            style={[
-              styles.backButton,
-              { backgroundColor: colors.surface, borderColor: colors.border },
-            ]}
-          >
-            <Ionicons name="chevron-back" size={18} color={colors.text} />
-          </Pressable>
-        ) : null}
-
-        <View style={styles.headerCopy}>
-          {eyebrow ? (
-            <ThemedText variant="label" style={styles.eyebrow}>
-              {eyebrow}
-            </ThemedText>
+                router.replace("/");
+              }}
+              style={[
+                styles.backButton,
+                { backgroundColor: colors.surface, borderColor: colors.border },
+              ]}
+            >
+              <Ionicons name="chevron-back" size={18} color={colors.text} />
+            </Pressable>
           ) : null}
-          {title ? <ThemedText variant="title">{title}</ThemedText> : null}
-          {subtitle ? <ThemedText variant="muted">{subtitle}</ThemedText> : null}
+
+          <View style={styles.headerCopy}>
+            {eyebrow ? (
+              <ThemedText variant="label" style={styles.eyebrow}>
+                {eyebrow}
+              </ThemedText>
+            ) : null}
+            {title ? <ThemedText variant="title">{title}</ThemedText> : null}
+            {subtitle ? (
+              <ThemedText variant="muted">{subtitle}</ThemedText>
+            ) : null}
+          </View>
         </View>
+        {headerAccessory ? <View>{headerAccessory}</View> : null}
       </View>
-      {headerAccessory ? <View>{headerAccessory}</View> : null}
-    </View>
-  ) : null;
+    ) : null;
 
   return (
-    <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
+    <SafeAreaView
+      style={[styles.safeArea, { backgroundColor: colors.background }]}
+    >
       {scrollable ? (
         <ScrollView
-          contentContainerStyle={[styles.content, contentContainerStyle]}
+          contentContainerStyle={[
+            isPadding && styles.content,
+            contentContainerStyle,
+          ]}
           showsVerticalScrollIndicator={false}
         >
           {header}
           {children}
         </ScrollView>
       ) : (
-        <View style={[styles.content, contentContainerStyle]}>
+        <View style={[isPadding && styles.content, contentContainerStyle]}>
           {header}
           {children}
         </View>

@@ -1,25 +1,66 @@
 import SplashLoading from "@/components/loading-splash";
-import { MetricCard } from "@/components/metric-card";
-import { ScreenShell } from "@/components/screen-shell";
-import { StatusPill } from "@/components/status-pill";
-import { SurfaceCard } from "@/components/surface-card";
 import { ThemedButton } from "@/components/themed-button";
 import { ThemedText } from "@/components/themed-text";
-import { idealFirstNicheLabel } from "@/constants/business";
+import { ThemedView } from "@/components/themed-view";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { useAppStore } from "@/stores/app-store";
+import { verticalScale } from "@/utils/styling";
 import { router } from "expo-router";
-import React from "react";
-import { StyleSheet, View } from "react-native";
+import React, { useRef } from "react";
+import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
+
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+const onboardingData = [
+  {
+    title: "Generate Invoice",
+    description: "Create and share invoices with ease",
+    image: require("../assets/IllustrationIcons/Frame.png"),
+  },
+  {
+    title: "Track Payments",
+    description: "Stay on top of every payment",
+    image: require("../assets/IllustrationIcons/Frame3.png"),
+  },
+  {
+    title: "Store Orders",
+    description: "Keep everything organized in one place",
+    image: require("../assets/IllustrationIcons/Frame2.png"),
+  },
+];
 
 const IndexScreen = () => {
   const authStatus = useAppStore((state) => state.authStatus);
   const profileStatus = useAppStore((state) => state.profileStatus);
+  const scrollRef = useRef<ScrollView>(null);
+  const [activeIndex, setActiveIndex] = React.useState(0);
 
   const setAuthLoading = useAppStore((state) => state.setAuthLoading);
+  const { width, height } = useWindowDimensions();
+  const { colors } = useAppTheme();
+  const carouselHeight = Math.min(Math.max(height * 0.48, 360), 460);
+  const imageHeight = carouselHeight * 0.78;
+
+  console.log("ScrollRef", scrollRef);
+
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const { contentOffset } = event.nativeEvent;
+    // console.log("Content Offset:", contentOffset);
+    const index = Math.round(contentOffset.x / width);
+    setActiveIndex(index);
+  };
 
   return (
-    <>
+    <SafeAreaView style={{ flex: 1 }}>
       {authStatus === "authenticated" ||
       authStatus === "loading" ||
       profileStatus === "loading" ? (
@@ -27,82 +68,119 @@ const IndexScreen = () => {
           <SplashLoading />
         </Animated.View>
       ) : (
-        <ScreenShell scrollable>
-          <Animated.View entering={FadeIn} exiting={FadeOut}>
-            <SurfaceCard style={styles.hero} tone="primary">
-              <StatusPill label="Mobile-first vendor OS" tone="brand" />
-              <ThemedText style={styles.heroTitle} variant="title">
-                Run your WhatsApp orders without spreadsheet chaos.
-              </ThemedText>
-              <ThemedText variant="muted">
-                Track orders, share invoices, monitor balances, and keep
-                deliveries moving from one mobile workspace built for Instagram
-                and WhatsApp sellers.
-              </ThemedText>
-              <View style={styles.ctaGroup}>
-                <ThemedButton
-                  label="Preview dashboard"
-                  onPress={() => router.replace("/(tabs)")}
-                />
-                <ThemedButton
-                  label="Sign in"
-                  onPress={() => router.push("/auth/sign-in")}
-                  variant="secondary"
-                />
-              </View>
-              <ThemedText
-                onPress={() => router.push("/auth/sign-up")}
-                style={styles.inlineLink}
-                variant="caption"
-              >
-                New vendor? Create account and start your free trial.
-              </ThemedText>
-            </SurfaceCard>
+        // <ScreenShell isPadding={false}>
+        <Animated.View
+          style={{
+            flex: 1,
+            // backgroundColor: colors.background,
+            paddingVertical: verticalScale(16),
+            alignItems: "center",
+            // borderWidth: 1,
+          }}
+          entering={FadeIn}
+          exiting={FadeOut}
+        >
+          <View style={{ width: "100%", marginBottom: verticalScale(20) }}>
+            <TouchableOpacity onPress={() => router.push("/auth/sign-up")}>
+              <ThemedView style={{ alignSelf: "flex-end", marginRight: 16 }}>
+                <ThemedText variant="muted">Skip</ThemedText>
+              </ThemedView>
+            </TouchableOpacity>
+          </View>
 
-            <View style={styles.metrics}>
-              <MetricCard
-                helper="Designed for fast order capture"
-                label="Goal"
-                tone="brand"
-                value="< 60s"
-              />
-              <MetricCard
-                helper="What vendors need immediately"
-                label="MVP flow"
-                tone="warning"
-                value="Orders"
-              />
+          <View
+            style={{ alignItems: "center", marginBottom: verticalScale(16) }}
+          >
+            <View style={{ flexDirection: "row" }}>
+              <ThemedText variant="title" style={{ color: "orange" }}>
+                V
+              </ThemedText>
+
+              <ThemedText variant="title" style={{ color: "#315C44" }}>
+                endora
+              </ThemedText>
             </View>
+          </View>
 
-            <SurfaceCard>
-              <ThemedText variant="subtitle">First niche</ThemedText>
-              <ThemedText variant="muted">
-                Start with Instagram and WhatsApp product sellers. They already
-                feel the pain of scattered chats, manual invoicing, and unpaid
-                balances.
-              </ThemedText>
-              <View style={styles.pillRow}>
-                <StatusPill label={idealFirstNicheLabel} tone="brand" />
-                <StatusPill label="Invoices from orders" tone="info" />
-                <StatusPill label="Payment tracking" tone="warning" />
-              </View>
-            </SurfaceCard>
+          <View
+            style={{
+              height: carouselHeight,
+              marginBottom: verticalScale(16),
+              borderWidth: 1,
+            }}
+          >
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              pagingEnabled
+              onScroll={handleScroll}
+              ref={scrollRef}
+              // scrollEventThrottle={1}
+            >
+              {onboardingData.map((item, index) => (
+                <View style={[styles.card, { width: width }]} key={index}>
+                  <Image
+                    source={item.image}
+                    style={{ width: width * 0.9, height: imageHeight }}
+                  />
+                  <View style={{ alignItems: "center" }}>
+                    <ThemedText variant="title">{item.title}</ThemedText>
+                    <ThemedText variant="caption">
+                      {item.description}
+                    </ThemedText>
+                  </View>
+                </View>
+              ))}
+            </ScrollView>
+          </View>
 
-            <SurfaceCard>
-              <ThemedText variant="subtitle">Phase 1 MVP</ThemedText>
-              <View style={styles.featureList}>
-                <ThemedText>Authentication and business setup</ThemedText>
-                <ThemedText>Customers, products, and orders</ThemedText>
-                <ThemedText>
-                  Invoices, payment tracking, and dashboard
-                </ThemedText>
-                <ThemedText>Subscription paywall with RevenueCat</ThemedText>
+          <View
+            style={{
+              flexDirection: "row",
+              gap: 8,
+              marginBottom: verticalScale(16),
+            }}
+          >
+            {onboardingData.map((_, index) => (
+              <View key={index}>
+                <ThemedView
+                  style={{
+                    width: 20,
+                    height: 6,
+                    borderRadius: 3,
+                    backgroundColor: activeIndex === index ? "green" : "gray",
+                  }}
+                  lightColor="green"
+                  darkColor=""
+                />
               </View>
-            </SurfaceCard>
-          </Animated.View>
-        </ScreenShell>
+            ))}
+          </View>
+
+          <View
+            style={{
+              flex: 1,
+              // borderWidth: 1,
+              justifyContent: "flex-end",
+              alignItems: "center",
+              gap: 16,
+            }}
+          >
+            <ThemedButton
+              style={{ width: width * 0.9 }}
+              label="Get Started"
+              onPress={() => router.push("/auth/sign-up")}
+            />
+            <View style={{ flexDirection: "row", gap: 4 }}>
+              <ThemedText>Already have an account?</ThemedText>
+              <TouchableOpacity onPress={() => router.push("/auth/sign-in")}>
+                <ThemedText style={{ color: "orange" }}>Sign In</ThemedText>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Animated.View>
       )}
-    </>
+    </SafeAreaView>
   );
 };
 
@@ -120,6 +198,10 @@ const styles = StyleSheet.create({
   },
   inlineLink: {
     fontWeight: "600",
+  },
+  card: {
+    alignItems: "center",
+    gap: 8,
   },
   metrics: {
     flexDirection: "row",

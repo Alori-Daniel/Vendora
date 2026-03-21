@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     minHeight: verticalScale(52),
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 16,
+    borderRadius: 8,
     borderWidth: 1,
     paddingHorizontal: 18,
   },

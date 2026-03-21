@@ -42,7 +42,9 @@ export default function SignInScreen() {
         <View style={styles.actions}>
           <ThemedButton
             disabled={!email || !password || signInMutation.isPending}
-            label={signInMutation.isPending ? "Signing in..." : "Open workspace"}
+            label={
+              signInMutation.isPending ? "Signing in..." : "Open workspace"
+            }
             onPress={() => signInMutation.mutate({ email, password })}
           />
           <ThemedButton
