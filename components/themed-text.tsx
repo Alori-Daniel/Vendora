@@ -65,6 +65,6 @@ const styles = StyleSheet.create({
   },
   caption: {
     fontSize: 13,
-    lineHeight: verticalScale(18),
+    // lineHeight: verticalScale(18),
   },
 });

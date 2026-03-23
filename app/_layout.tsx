@@ -5,11 +5,13 @@ import "react-native-reanimated";
 import { useAppTheme } from "@/hooks/use-app-theme";
 import { AppProviders } from "@/providers/app-providers";
 import { AuthGate } from "@/providers/auth-gate";
+import { KeyboardController } from "react-native-keyboard-controller";
 
 export const unstable_settings = {
   anchor: "(tabs)",
 };
 // SplashScreen.preventAutoHideAsync();
+KeyboardController.preload();
 
 export default function RootLayout() {
   const { colors, isDark } = useAppTheme();

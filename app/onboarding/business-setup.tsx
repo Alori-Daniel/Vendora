@@ -12,8 +12,8 @@ import {
   recommendedBusinessCategories,
   type RecommendedBusinessCategory,
 } from "@/constants/business";
-import { useUpsertBusinessProfileMutation } from "@/hooks/use-business-profile";
 import { useAppTheme } from "@/hooks/use-app-theme";
+import { useUpsertBusinessProfileMutation } from "@/hooks/use-business-profile";
 import { useAppStore } from "@/stores/app-store";
 
 export default function BusinessSetupScreen() {
@@ -28,9 +28,7 @@ export default function BusinessSetupScreen() {
   const [businessAddress, setBusinessAddress] = useState("");
   const [bankDetails, setBankDetails] = useState("");
   const [selectedCategory, setSelectedCategory] =
-    useState<RecommendedBusinessCategory>(
-    recommendedBusinessCategories[0],
-    );
+    useState<RecommendedBusinessCategory>(recommendedBusinessCategories[0]);
 
   const handleSave = async () => {
     if (!session?.user.id) {
@@ -53,50 +51,48 @@ export default function BusinessSetupScreen() {
 
   return (
     <ScreenShell
-      subtitle="Collect only the fields needed to start invoicing and tracking payments."
+      subtitle="Fill in business details"
       title="Business setup"
       withBackButton
     >
-      <SurfaceCard>
-        <ThemedInput
-          label="Business name"
-          onChangeText={setBusinessName}
-          placeholder="Atelier by Nena"
-          value={businessName}
-        />
-        <ThemedInput
-          label="Phone"
-          onChangeText={setPhone}
-          placeholder="+234 803 000 9921"
-          value={phone}
-        />
-        <ThemedInput
-          label="Default currency"
-          onChangeText={setDefaultCurrency}
-          placeholder="NGN"
-          value={defaultCurrency}
-        />
-        <ThemedInput
-          label="Invoice prefix"
-          onChangeText={setInvoicePrefix}
-          placeholder="ATL"
-          value={invoicePrefix}
-        />
-        <ThemedInput
-          label="Business address"
-          multiline
-          numberOfLines={3}
-          onChangeText={setBusinessAddress}
-          placeholder="12 Admiralty Way, Lekki Phase 1, Lagos"
-          value={businessAddress}
-        />
-        <ThemedInput
-          label="Bank details"
-          onChangeText={setBankDetails}
-          placeholder="Providus Bank 0123456789"
-          value={bankDetails}
-        />
-      </SurfaceCard>
+      <ThemedInput
+        label="Business name"
+        onChangeText={setBusinessName}
+        placeholder="Atelier by Nena"
+        value={businessName}
+      />
+      <ThemedInput
+        label="Phone"
+        onChangeText={setPhone}
+        placeholder="+234 803 000 9921"
+        value={phone}
+      />
+      <ThemedInput
+        label="Default currency"
+        onChangeText={setDefaultCurrency}
+        placeholder="NGN"
+        value={defaultCurrency}
+      />
+      <ThemedInput
+        label="Invoice prefix"
+        onChangeText={setInvoicePrefix}
+        placeholder="ATL"
+        value={invoicePrefix}
+      />
+      <ThemedInput
+        label="Business address"
+        multiline
+        numberOfLines={3}
+        onChangeText={setBusinessAddress}
+        placeholder="12 Admiralty Way, Lekki Phase 1, Lagos"
+        value={businessAddress}
+      />
+      <ThemedInput
+        label="Bank details"
+        onChangeText={setBankDetails}
+        placeholder="Providus Bank 0123456789"
+        value={bankDetails}
+      />
 
       <SurfaceCard tone="muted">
         <ThemedText variant="subtitle">Choose your category</ThemedText>

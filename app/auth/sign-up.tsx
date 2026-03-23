@@ -10,6 +10,7 @@ import { ThemedText } from "@/components/themed-text";
 import { useSignUpMutation } from "@/hooks/use-auth";
 import { hasSupabaseConfig } from "@/lib/env";
 import { useAppStore } from "@/stores/app-store";
+import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 
 export default function SignUpScreen() {
   const [fullName, setFullName] = useState("");
@@ -37,12 +38,16 @@ export default function SignUpScreen() {
   };
 
   return (
-    <ScreenShell
-      subtitle="Keep the first-run experience short enough that a seller can finish setup from a DM break."
-      title="Create account"
-      withBackButton
+    <KeyboardAvoidingView
+      behavior={"padding"}
+      // keyboardVerticalOffset={100}
+      style={{ flex: 1 }}
     >
-      <SurfaceCard>
+      <ScreenShell
+        subtitle="Fill in your details to get started."
+        title="Create account"
+        withBackButton
+      >
         <ThemedInput
           label="Full name"
           onChangeText={setFullName}
@@ -66,52 +71,66 @@ export default function SignUpScreen() {
         />
         <View style={styles.actions}>
           <ThemedButton
-            disabled={!fullName || !email || !password || signUpMutation.isPending}
+            disabled={
+              !fullName || !email || !password || signUpMutation.isPending
+            }
             label={
-              signUpMutation.isPending
-                ? "Creating account..."
-                : "Continue to business setup"
+              signUpMutation.isPending ? "Creating account..." : "Register"
             }
             onPress={() => {
               void handleSubmit();
             }}
           />
-          <ThemedText
-            onPress={() => router.push("/auth/sign-in")}
-            style={styles.link}
-            variant="caption"
+          <View
+            style={{
+              flexDirection: "row",
+              gap: 8,
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
           >
-            Already have an account? Sign in
-          </ThemedText>
+            <ThemedText style={styles.link} variant="caption">
+              Already have an account?
+            </ThemedText>
+
+            <ThemedText
+              onPress={() => router.push("/auth/sign-in")}
+              style={styles.link}
+              variant="caption"
+            >
+              Sign in
+            </ThemedText>
+          </View>
         </View>
-      </SurfaceCard>
+        {/* </SurfaceCard> */}
 
-      {!hasSupabaseConfig ? (
-        <SurfaceCard tone="muted">
-          <ThemedText variant="subtitle">Supabase config needed</ThemedText>
-          <ThemedText variant="muted">
-            Add your Supabase URL and anon key to `.env` using `.env.example`
-            before testing sign-up.
-          </ThemedText>
-        </SurfaceCard>
-      ) : null}
+        {!hasSupabaseConfig ? (
+          <SurfaceCard tone="muted">
+            <ThemedText variant="subtitle">Supabase config needed</ThemedText>
+            <ThemedText variant="muted">
+              Add your Supabase URL and anon key to `.env` using `.env.example`
+              before testing sign-up.
+            </ThemedText>
+          </SurfaceCard>
+        ) : null}
 
-      {confirmationMessage ? (
-        <SurfaceCard tone="muted">
-          <ThemedText variant="subtitle">Next step</ThemedText>
-          <ThemedText variant="muted">{confirmationMessage}</ThemedText>
-        </SurfaceCard>
-      ) : null}
+        {confirmationMessage ? (
+          <SurfaceCard tone="muted">
+            <ThemedText variant="subtitle">Next step</ThemedText>
+            <ThemedText variant="muted">{confirmationMessage}</ThemedText>
+          </SurfaceCard>
+        ) : null}
 
-      {signUpMutation.error || lastError ? (
-        <SurfaceCard tone="muted">
-          <ThemedText variant="subtitle">Sign-up error</ThemedText>
-          <ThemedText variant="muted">
-            {signUpMutation.error?.message ?? lastError}
-          </ThemedText>
-        </SurfaceCard>
-      ) : null}
-    </ScreenShell>
+        {signUpMutation.error || lastError ? (
+          <SurfaceCard tone="muted">
+            <ThemedText variant="subtitle">Sign-up error</ThemedText>
+            <ThemedText variant="muted">
+              {signUpMutation.error?.message ?? lastError}
+            </ThemedText>
+          </SurfaceCard>
+        ) : null}
+      </ScreenShell>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -120,7 +139,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   link: {
-    fontWeight: "700",
+    fontWeight: "400",
     textAlign: "center",
   },
 });

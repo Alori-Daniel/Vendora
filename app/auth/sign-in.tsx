@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
 
 import { ScreenShell } from "@/components/screen-shell";
 import { SurfaceCard } from "@/components/surface-card";
@@ -18,12 +18,16 @@ export default function SignInScreen() {
   const lastError = useAppStore((state) => state.lastError);
 
   return (
-    <ScreenShell
-      subtitle="Email, magic link, or a lightweight phone-first flow can sit here later."
-      title="Sign in"
-      withBackButton
+    <KeyboardAvoidingView
+      behavior={"padding"}
+      // keyboardVerticalOffset={100}
+      style={{ flex: 1 }}
     >
-      <SurfaceCard>
+      <ScreenShell
+        subtitle="Fill in your details to proceed"
+        title="Welcome Back!"
+        withBackButton
+      >
         <ThemedInput
           autoCapitalize="none"
           keyboardType="email-address"
@@ -42,9 +46,7 @@ export default function SignInScreen() {
         <View style={styles.actions}>
           <ThemedButton
             disabled={!email || !password || signInMutation.isPending}
-            label={
-              signInMutation.isPending ? "Signing in..." : "Open workspace"
-            }
+            label={signInMutation.isPending ? "Signing in..." : "Sign In"}
             onPress={() => signInMutation.mutate({ email, password })}
           />
           <ThemedButton
@@ -53,35 +55,27 @@ export default function SignInScreen() {
             variant="secondary"
           />
         </View>
-      </SurfaceCard>
 
-      {!hasSupabaseConfig ? (
-        <SurfaceCard tone="muted">
-          <ThemedText variant="subtitle">Supabase config needed</ThemedText>
-          <ThemedText variant="muted">
-            Add your Supabase URL and anon key to `.env` using `.env.example`
-            before testing sign-in.
-          </ThemedText>
-        </SurfaceCard>
-      ) : null}
+        {!hasSupabaseConfig ? (
+          <SurfaceCard tone="muted">
+            <ThemedText variant="subtitle">Supabase config needed</ThemedText>
+            <ThemedText variant="muted">
+              Add your Supabase URL and anon key to `.env` using `.env.example`
+              before testing sign-in.
+            </ThemedText>
+          </SurfaceCard>
+        ) : null}
 
-      {signInMutation.error || lastError ? (
-        <SurfaceCard tone="muted">
-          <ThemedText variant="subtitle">Sign-in error</ThemedText>
-          <ThemedText variant="muted">
-            {signInMutation.error?.message ?? lastError}
-          </ThemedText>
-        </SurfaceCard>
-      ) : null}
-
-      <SurfaceCard tone="muted">
-        <ThemedText variant="subtitle">Why vendors come back</ThemedText>
-        <ThemedText variant="muted">
-          The first screen after sign-in shows open orders, unpaid balances, and
-          the quickest next action to keep the business moving.
-        </ThemedText>
-      </SurfaceCard>
-    </ScreenShell>
+        {signInMutation.error || lastError ? (
+          <SurfaceCard tone="muted">
+            <ThemedText variant="subtitle">Sign-in error</ThemedText>
+            <ThemedText variant="muted">
+              {signInMutation.error?.message ?? lastError}
+            </ThemedText>
+          </SurfaceCard>
+        ) : null}
+      </ScreenShell>
+    </KeyboardAvoidingView>
   );
 }
 

@@ -4,6 +4,7 @@ export const recommendedBusinessCategories = [
   "Beauty and perfume vendor",
   "Thrift seller",
   "Phone accessory seller",
+  "Digital Products",
 ] as const;
 
 export type RecommendedBusinessCategory =

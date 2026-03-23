@@ -50,8 +50,6 @@ const IndexScreen = () => {
   const carouselHeight = Math.min(Math.max(height * 0.48, 360), 460);
   const imageHeight = carouselHeight * 0.78;
 
-  console.log("ScrollRef", scrollRef);
-
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const { contentOffset } = event.nativeEvent;
     // console.log("Content Offset:", contentOffset);
@@ -89,10 +87,10 @@ const IndexScreen = () => {
           </View>
 
           <View
-            style={{ alignItems: "center", marginBottom: verticalScale(16) }}
+            style={{ alignItems: "center", marginBottom: verticalScale(20) }}
           >
             <View style={{ flexDirection: "row" }}>
-              <ThemedText variant="title" style={{ color: "orange" }}>
+              <ThemedText variant="title" style={{ color: "#EDA153" }}>
                 V
               </ThemedText>
 
@@ -106,7 +104,7 @@ const IndexScreen = () => {
             style={{
               height: carouselHeight,
               marginBottom: verticalScale(16),
-              borderWidth: 1,
+              // borderWidth: 1,
             }}
           >
             <ScrollView
@@ -124,8 +122,16 @@ const IndexScreen = () => {
                     style={{ width: width * 0.9, height: imageHeight }}
                   />
                   <View style={{ alignItems: "center" }}>
-                    <ThemedText variant="title">{item.title}</ThemedText>
-                    <ThemedText variant="caption">
+                    <ThemedText
+                      variant="title"
+                      style={{ color: colors.primary }}
+                    >
+                      {item.title}
+                    </ThemedText>
+                    <ThemedText
+                      variant="caption"
+                      style={{ color: colors.text }}
+                    >
                       {item.description}
                     </ThemedText>
                   </View>
@@ -148,10 +154,11 @@ const IndexScreen = () => {
                     width: 20,
                     height: 6,
                     borderRadius: 3,
-                    backgroundColor: activeIndex === index ? "green" : "gray",
+                    backgroundColor:
+                      activeIndex === index ? colors.primary : colors.textMuted,
                   }}
-                  lightColor="green"
-                  darkColor=""
+                  // lightColor="green"
+                  // darkColor=""
                 />
               </View>
             ))}
@@ -174,7 +181,9 @@ const IndexScreen = () => {
             <View style={{ flexDirection: "row", gap: 4 }}>
               <ThemedText>Already have an account?</ThemedText>
               <TouchableOpacity onPress={() => router.push("/auth/sign-in")}>
-                <ThemedText style={{ color: "orange" }}>Sign In</ThemedText>
+                <ThemedText style={{ color: colors.primary }}>
+                  Sign In
+                </ThemedText>
               </TouchableOpacity>
             </View>
           </View>
