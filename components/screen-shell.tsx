@@ -18,6 +18,7 @@ import { spacingX, spacingY } from "@/utils/styling";
 type ScreenShellProps = {
   title?: string;
   subtitle?: string;
+  smallTitle?: boolean;
   eyebrow?: string;
   withBackButton?: boolean;
   headerAccessory?: ReactNode;
@@ -30,6 +31,7 @@ type ScreenShellProps = {
 export function ScreenShell({
   title,
   subtitle,
+  smallTitle = false,
   eyebrow,
   isPadding = true,
   withBackButton = false,
@@ -70,7 +72,11 @@ export function ScreenShell({
                 {eyebrow}
               </ThemedText>
             ) : null}
-            {title ? <ThemedText variant="title">{title}</ThemedText> : null}
+            {title ? (
+              <ThemedText variant={smallTitle ? "titleSmall" : "title"}>
+                {title}
+              </ThemedText>
+            ) : null}
             {subtitle ? (
               <ThemedText variant="muted">{subtitle}</ThemedText>
             ) : null}

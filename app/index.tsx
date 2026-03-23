@@ -44,7 +44,6 @@ const IndexScreen = () => {
   const scrollRef = useRef<ScrollView>(null);
   const [activeIndex, setActiveIndex] = React.useState(0);
 
-  const setAuthLoading = useAppStore((state) => state.setAuthLoading);
   const { width, height } = useWindowDimensions();
   const { colors } = useAppTheme();
   const carouselHeight = Math.min(Math.max(height * 0.48, 360), 460);

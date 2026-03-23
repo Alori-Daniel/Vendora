@@ -2,21 +2,46 @@ import { MetricCard } from "@/components/metric-card";
 import { ScreenShell } from "@/components/screen-shell";
 import { StatusPill } from "@/components/status-pill";
 import { SurfaceCard } from "@/components/surface-card";
-import { ThemedButton } from "@/components/themed-button";
+import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 
 import { ListRow } from "@/components/list-row";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { useDashboardQuery } from "@/hooks/use-workspace";
 import { useAppStore } from "@/stores/app-store";
 import { formatCurrency, formatShortDate } from "@/utils/formatters";
-import { spacingY } from "@/utils/styling";
+import { radius, spacingY } from "@/utils/styling";
 import { getOrderStatusTone, getStatusLabel } from "@/utils/vendor-status";
 import { router } from "expo-router";
 
+const quickActionItems = [
+  {
+    label: "New Order",
+    icon: "add",
+    route: "/orders/create",
+  },
+  {
+    label: "Add Customer",
+    icon: "person-add-outline",
+    route: "/customers/create",
+  },
+  {
+    label: "Send Invoice",
+    icon: "document-text-outline",
+    route: "/invoices",
+  },
+  {
+    label: "Products",
+    icon: "cube-outline",
+    route: "/products",
+  },
+] as const;
+
 const HomeScreen = () => {
+  const { colors } = useAppTheme();
   const businessProfile = useAppStore((state) => state.businessProfile);
   const dashboardQuery = useDashboardQuery();
   const dashboard = dashboardQuery.data?.dashboard;
@@ -54,6 +79,7 @@ const HomeScreen = () => {
 
   return (
     <ScreenShell
+      smallTitle={true}
       eyebrow={businessProfile?.business_category ?? "Vendor workspace"}
       subtitle="Here is your data-driven daily overview"
       title={`Good morning, ${businessProfile?.business_name ?? "Vendor"}`}
@@ -94,27 +120,50 @@ const HomeScreen = () => {
         </View>
       </SurfaceCard>
 
-      <View style={styles.quickActions}>
-        <ThemedButton
-          label="New order"
-          onPress={() => router.push("/orders/create")}
-        />
-        <ThemedButton
-          label="Payments log"
-          onPress={() => router.push("/payments")}
-          variant="secondary"
-        />
+      <View style={styles.quickActionsSection}>
+        <ThemedText variant="subtitle">Quick Actions</ThemedText>
+        <View style={styles.quickActions}>
+          {quickActionItems.map((action) => (
+            <Pressable
+              accessibilityRole="button"
+              key={action.label}
+              onPress={() => router.push(action.route)}
+              style={({ pressed }) => [
+                styles.quickActionItem,
+                { opacity: pressed ? 0.82 : 1 },
+              ]}
+            >
+              <View
+                style={[
+                  styles.quickActionIconWrap,
+                  { backgroundColor: colors.primary },
+                ]}
+              >
+                <Ionicons
+                  color={colors.onPrimary}
+                  name={action.icon}
+                  size={21}
+                />
+              </View>
+              <ThemedText style={styles.quickActionLabel}>
+                {action.label}
+              </ThemedText>
+            </Pressable>
+          ))}
+        </View>
       </View>
 
       <View style={styles.metricGrid}>
         <MetricCard
           helper="Non-cancelled orders"
-          label="This month"
+          label="Month-to-Date Revenue"
+          smallRadius
           value={formatCurrency(dashboard?.salesThisMonth ?? 0)}
         />
         <MetricCard
           helper={`${dashboard?.cancelledOrders ?? 0} cancelled so far`}
           label="Completed"
+          smallRadius
           tone="success"
           value={`${dashboard?.completedOrders ?? 0}`}
         />
@@ -203,13 +252,36 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     flexWrap: "wrap",
-    gap: 20,
+    gap: 15,
     // borderWidth: 1,
   },
   quickActions: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 12,
+    justifyContent: "space-between",
+    gap: 5,
+  },
+  quickActionsSection: {
+    gap: 16,
+  },
+  quickActionItem: {
+    alignItems: "center",
+    flex: 1,
+    gap: spacingY._5,
+    minWidth: 68,
+    // borderWidth: 1,
+  },
+  quickActionIconWrap: {
+    alignItems: "center",
+    borderRadius: radius.full,
+    height: 53,
+    justifyContent: "center",
+    width: 53,
+  },
+  quickActionLabel: {
+    fontSize: 11,
+    fontWeight: "500",
+    textAlign: "center",
   },
   sectionHeader: {
     flexDirection: "row",

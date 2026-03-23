@@ -11,6 +11,7 @@ type MetricCardProps = {
   label: string;
   value: string;
   helper?: string;
+  smallRadius?: boolean;
   tone?: MetricTone;
 };
 
@@ -18,6 +19,7 @@ export function MetricCard({
   label,
   value,
   helper,
+  smallRadius = false,
   tone = "default",
 }: MetricCardProps) {
   const { colors } = useAppTheme();
@@ -31,15 +33,17 @@ export function MetricCard({
           ? colors.warning
           : colors.text;
 
-  const cardTone = tone === "brand" ? "primary" : tone === "default" ? "default" : "muted";
+  const cardTone =
+    tone === "brand" ? "primary" : tone === "default" ? "default" : "muted";
 
   return (
-    <SurfaceCard style={styles.card} tone={cardTone}>
+    <SurfaceCard smallRadius={smallRadius} style={styles.card} tone={cardTone}>
       <ThemedText variant="caption">{label}</ThemedText>
       <ThemedText
         darkColor={valueColor}
         lightColor={valueColor}
-        style={styles.value}
+        // style={styles.value}
+        variant="titleSmall"
       >
         {value}
       </ThemedText>

@@ -11,6 +11,7 @@ type SurfaceCardProps = {
   tone?: SurfaceCardTone;
   style?: StyleProp<ViewStyle>;
   verticalPadding?: number;
+  smallRadius?: boolean;
   children: ReactNode;
 };
 
@@ -18,6 +19,7 @@ export function SurfaceCard({
   tone = "default",
   style,
   verticalPadding,
+  smallRadius = false,
   children,
 }: SurfaceCardProps) {
   const { colors } = useAppTheme();
@@ -40,6 +42,7 @@ export function SurfaceCard({
         { borderColor },
         style,
         verticalPadding ? { paddingVertical: verticalPadding } : {},
+        smallRadius ? { borderRadius: radius._10 } : {},
       ]}
     >
       {children}
@@ -49,7 +52,7 @@ export function SurfaceCard({
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: radius._20,
+    borderRadius: radius._17,
     borderWidth: 1,
     gap: spacingY._5,
     paddingHorizontal: spacingX._10,
