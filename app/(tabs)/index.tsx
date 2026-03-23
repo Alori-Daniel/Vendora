@@ -8,11 +8,13 @@ import { StyleSheet, View } from "react-native";
 
 import { ListRow } from "@/components/list-row";
 import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
 import { useDashboardQuery } from "@/hooks/use-workspace";
 import { useAppStore } from "@/stores/app-store";
+import { formatCurrency, formatShortDate } from "@/utils/formatters";
+import { spacingY } from "@/utils/styling";
 import { getOrderStatusTone, getStatusLabel } from "@/utils/vendor-status";
 import { router } from "expo-router";
-import { formatCurrency, formatShortDate } from "@/utils/formatters";
 
 const HomeScreen = () => {
   const businessProfile = useAppStore((state) => state.businessProfile);
@@ -42,7 +44,9 @@ const HomeScreen = () => {
         title={businessProfile?.business_name ?? "Dashboard"}
       >
         <SurfaceCard>
-          <ThemedText variant="muted">{dashboardQuery.error.message}</ThemedText>
+          <ThemedText variant="muted">
+            {dashboardQuery.error.message}
+          </ThemedText>
         </SurfaceCard>
       </ScreenShell>
     );
@@ -51,39 +55,50 @@ const HomeScreen = () => {
   return (
     <ScreenShell
       eyebrow={businessProfile?.business_category ?? "Vendor workspace"}
-      subtitle="Everything the vendor needs at a glance when the app opens."
+      subtitle="Here is your data-driven daily overview"
       title={`Good morning, ${businessProfile?.business_name ?? "Vendor"}`}
     >
-      <SurfaceCard tone="primary">
+      <SurfaceCard tone="primary" verticalPadding={spacingY._10}>
         <View style={styles.heroHeader}>
           <View style={styles.heroCopy}>
-            <ThemedText variant="subtitle">Today’s business status</ThemedText>
-            <ThemedText variant="muted">
-              {dashboard?.openOrders ?? 0} active orders,{" "}
-              {dashboard?.unpaidInvoiceCount ?? 0} invoices still awaiting full
-              payment.
-            </ThemedText>
+            <ThemedText variant="subtitle">Sales Snapshot</ThemedText>
           </View>
-          <StatusPill label="Workspace live" tone="brand" />
+          <StatusPill label="Live Data" tone="brand" />
         </View>
         <View style={styles.metricGrid}>
-          <MetricCard
-            helper="Booked from today’s orders"
-            label="Sales today"
-            tone="brand"
-            value={formatCurrency(dashboard?.salesToday ?? 0)}
-          />
-          <MetricCard
-            helper="Across unpaid and partial invoices"
-            label="Outstanding"
-            tone="warning"
-            value={formatCurrency(dashboard?.outstandingBalance ?? 0)}
-          />
+          <ThemedView style={{ backgroundColor: "transparent", flex: 1 }}>
+            <ThemedText variant="titleSmall">
+              {formatCurrency(dashboard?.salesToday ?? 0)}
+            </ThemedText>
+            <ThemedText variant="caption">Today Sales</ThemedText>
+          </ThemedView>
+
+          <ThemedView style={{ backgroundColor: "transparent", gap: 6 }}>
+            <ThemedView style={{ backgroundColor: "transparent", gap: 1 }}>
+              <ThemedText variant="titleSmall">
+                {dashboard?.openOrders ?? 0}
+              </ThemedText>
+              <ThemedText variant="caption">Active Orders</ThemedText>
+              <ThemedText variant="muted">
+                ({dashboard?.unpaidInvoiceCount ?? 0} pending)
+              </ThemedText>
+            </ThemedView>
+
+            <ThemedView style={{ backgroundColor: "transparent", gap: 2 }}>
+              <ThemedText variant="titleSmall">
+                {formatCurrency(dashboard?.outstandingBalance ?? 0)}
+              </ThemedText>
+              <ThemedText variant="caption">Outstanding</ThemedText>
+            </ThemedView>
+          </ThemedView>
         </View>
       </SurfaceCard>
 
       <View style={styles.quickActions}>
-        <ThemedButton label="New order" onPress={() => router.push("/orders/create")} />
+        <ThemedButton
+          label="New order"
+          onPress={() => router.push("/orders/create")}
+        />
         <ThemedButton
           label="Payments log"
           onPress={() => router.push("/payments")}
@@ -150,7 +165,9 @@ const HomeScreen = () => {
       <SurfaceCard>
         <View style={styles.sectionHeader}>
           <ThemedText variant="subtitle">Startup checklist</ThemedText>
-          <ThemedText variant="caption">Retention starts with daily habits</ThemedText>
+          <ThemedText variant="caption">
+            Retention starts with daily habits
+          </ThemedText>
         </View>
         <View style={styles.stack}>
           {(dashboard?.checklist ?? []).map((item) => (
@@ -175,6 +192,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 12,
     justifyContent: "space-between",
+    alignItems: "center",
+    // borderWidth: 1,
   },
   heroCopy: {
     flex: 1,
@@ -182,8 +201,10 @@ const styles = StyleSheet.create({
   },
   metricGrid: {
     flexDirection: "row",
+    justifyContent: "space-between",
     flexWrap: "wrap",
     gap: 20,
+    // borderWidth: 1,
   },
   quickActions: {
     flexDirection: "row",

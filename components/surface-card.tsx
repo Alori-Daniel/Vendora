@@ -10,12 +10,14 @@ type SurfaceCardTone = "default" | "muted" | "primary";
 type SurfaceCardProps = {
   tone?: SurfaceCardTone;
   style?: StyleProp<ViewStyle>;
+  verticalPadding?: number;
   children: ReactNode;
 };
 
 export function SurfaceCard({
   tone = "default",
   style,
+  verticalPadding,
   children,
 }: SurfaceCardProps) {
   const { colors } = useAppTheme();
@@ -33,7 +35,12 @@ export function SurfaceCard({
     <ThemedView
       darkColor={backgroundColor}
       lightColor={backgroundColor}
-      style={[styles.card, { borderColor }, style]}
+      style={[
+        styles.card,
+        { borderColor },
+        style,
+        verticalPadding ? { paddingVertical: verticalPadding } : {},
+      ]}
     >
       {children}
     </ThemedView>
@@ -44,8 +51,8 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: radius._20,
     borderWidth: 1,
-    gap: spacingY._12,
-    paddingHorizontal: spacingX._15,
+    gap: spacingY._5,
+    paddingHorizontal: spacingX._10,
     paddingVertical: spacingY._15,
   },
 });

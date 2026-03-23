@@ -8,6 +8,7 @@ type TextVariant =
   | "muted"
   | "label"
   | "title"
+  | "titleSmall"
   | "subtitle"
   | "button"
   | "caption";
@@ -36,11 +37,11 @@ export function ThemedText({
 const styles = StyleSheet.create({
   body: {
     fontSize: 16,
-    lineHeight: verticalScale(24),
+    // lineHeight: verticalScale(24),
   },
   muted: {
-    fontSize: 15,
-    lineHeight: verticalScale(22),
+    fontSize: 13,
+    // lineHeight: verticalScale(22),
   },
   label: {
     fontSize: 14,
@@ -50,12 +51,17 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
-    lineHeight: verticalScale(38),
+    // lineHeight: verticalScale(38),
+    fontWeight: "700",
+  },
+  titleSmall: {
+    fontSize: 28,
+    // lineHeight: verticalScale(34),
     fontWeight: "700",
   },
   subtitle: {
     fontSize: 20,
-    lineHeight: verticalScale(28),
+    // lineHeight: verticalScale(28),
     fontWeight: "600",
   },
   button: {
