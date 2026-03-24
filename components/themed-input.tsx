@@ -12,8 +12,9 @@ import { useAppTheme } from "@/hooks/use-app-theme";
 import { radius, spacingX, spacingY, verticalScale } from "@/utils/styling";
 
 export type ThemedInputProps = TextInputProps & {
-  label: string;
+  label?: string;
   hint?: string;
+  smallRadius?: boolean;
   containerStyle?: StyleProp<ViewStyle>;
 };
 
@@ -21,6 +22,7 @@ export function ThemedInput({
   label,
   hint,
   containerStyle,
+  smallRadius = false,
   style,
   ...props
 }: ThemedInputProps) {
@@ -28,9 +30,11 @@ export function ThemedInput({
 
   return (
     <View style={[styles.container, containerStyle]}>
-      <ThemedText variant="caption" style={styles.label}>
-        {label}
-      </ThemedText>
+      {label ? (
+        <ThemedText variant="caption" style={styles.label}>
+          {label}
+        </ThemedText>
+      ) : null}
       <TextInput
         placeholderTextColor={colors.textMuted}
         style={[
@@ -40,6 +44,7 @@ export function ThemedInput({
             borderColor: colors.border,
             color: colors.text,
           },
+          smallRadius && { borderRadius: radius._6 },
           style,
         ]}
         {...props}
@@ -66,7 +71,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: spacingX._15,
     paddingVertical: spacingY._12,
-    fontSize: 16,
+    fontSize: 14,
   },
   hint: {
     opacity: 0.85,

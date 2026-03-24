@@ -25,6 +25,7 @@ type ScreenShellProps = {
   scrollable?: boolean;
   contentContainerStyle?: StyleProp<ViewStyle>;
   isPadding?: boolean;
+  isRelative?: boolean;
   children: ReactNode;
 };
 
@@ -32,6 +33,7 @@ export function ScreenShell({
   title,
   subtitle,
   smallTitle = false,
+  isRelative = false,
   eyebrow,
   isPadding = true,
   withBackButton = false,
@@ -106,7 +108,13 @@ export function ScreenShell({
           {children}
         </ScrollView>
       ) : (
-        <View style={[isPadding && styles.content, contentContainerStyle]}>
+        <View
+          style={[
+            { flex: 1 },
+            isPadding && styles.content,
+            contentContainerStyle,
+          ]}
+        >
           {header}
           {children}
         </View>
@@ -118,11 +126,12 @@ export function ScreenShell({
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+    position: "relative",
   },
   content: {
-    gap: spacingY._20,
-    paddingHorizontal: spacingX._20,
-    paddingTop: spacingY._20,
+    gap: spacingY._15,
+    paddingHorizontal: spacingX._15,
+    paddingTop: spacingY._7,
     paddingBottom: spacingY._40,
   },
   header: {
