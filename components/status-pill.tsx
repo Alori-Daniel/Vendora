@@ -18,10 +18,7 @@ type StatusPillProps = {
   tone?: StatusTone;
 };
 
-export function StatusPill({
-  label,
-  tone = "neutral",
-}: StatusPillProps) {
+export function StatusPill({ label, tone = "neutral" }: StatusPillProps) {
   const { colors } = useAppTheme();
 
   const palette =
@@ -83,12 +80,12 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     borderRadius: radius.full,
     borderWidth: 1,
-    paddingHorizontal: spacingX._12,
-    paddingVertical: spacingY._7,
+    paddingHorizontal: spacingX._7,
+    paddingVertical: spacingY._5,
   },
   label: {
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: "600",
     letterSpacing: 0.2,
     textTransform: "capitalize",
   },

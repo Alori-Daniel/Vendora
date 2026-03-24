@@ -9,7 +9,7 @@ import { SurfaceCard } from "@/components/surface-card";
 import { ThemedButton } from "@/components/themed-button";
 import { ThemedText } from "@/components/themed-text";
 import { useOrdersQuery } from "@/hooks/use-workspace";
-import { formatCurrency, formatShortDate } from "@/utils/formatters";
+import { formatCurrency } from "@/utils/formatters";
 import { getOrderStatusTone, getStatusLabel } from "@/utils/vendor-status";
 
 export default function OrdersScreen() {
@@ -51,14 +51,17 @@ export default function OrdersScreen() {
   return (
     <ScreenShell
       headerAccessory={
-        <ThemedButton label="New order" onPress={() => router.push("/orders/create")} />
+        <ThemedButton
+          label="New order"
+          onPress={() => router.push("/orders/create")}
+        />
       }
       subtitle="Capture and follow every order from DM to delivery."
       title="Orders"
     >
       <View style={styles.metrics}>
         <SurfaceCard style={styles.metricCard} tone="muted">
-          <ThemedText variant="caption">Open pipeline</ThemedText>
+          <ThemedText variant="caption">Open orders</ThemedText>
           <ThemedText style={styles.metricValue}>{openOrders}</ThemedText>
         </SurfaceCard>
         <SurfaceCard style={styles.metricCard}>
@@ -67,35 +70,34 @@ export default function OrdersScreen() {
         </SurfaceCard>
       </View>
 
-      <SurfaceCard>
-        <View style={styles.list}>
-          {orders.length > 0 ? (
-            orders.map((order) => (
-              <ListRow
-                accessory={
-                  <StatusPill
-                    label={getStatusLabel(order.status)}
-                    tone={getOrderStatusTone(order.status)}
-                  />
-                }
-                key={order.id}
-                meta={formatCurrency(order.balance)}
-                onPress={() => router.push(`/orders/${order.id}`)}
-                subtitle={`${
-                  order.customer?.full_name ?? "Walk-in customer"
-                } · ${
-                  order.due_at ? `Due ${formatShortDate(order.due_at)}` : "No due date"
-                }`}
-                title={`${order.order_number} · ${formatCurrency(order.total)}`}
-              />
-            ))
-          ) : (
-            <ThemedText variant="muted">
-              No orders yet. Use the New order flow to start tracking sales.
-            </ThemedText>
-          )}
-        </View>
-      </SurfaceCard>
+      <View style={styles.list}>
+        {orders.length > 0 ? (
+          orders.map((order) => (
+            <ListRow
+              accessory={
+                <StatusPill
+                  label={getStatusLabel(order.status)}
+                  tone={getOrderStatusTone(order.status)}
+                />
+              }
+              key={order.id}
+              meta={formatCurrency(order.subtotal)}
+              onPress={() => router.push(`/orders/${order.id}`)}
+              // subtitle={
+              //   order.due_at
+              //     ? `Due ${formatShortDate(order.due_at)}`
+              //     : "No due date"
+              // }
+              subtitle={`${order.customer?.full_name ?? "Walk-in customer"}`}
+              title={`${order.order_number}`}
+            />
+          ))
+        ) : (
+          <ThemedText variant="muted">
+            No orders yet. Use the New order flow to start tracking sales.
+          </ThemedText>
+        )}
+      </View>
     </ScreenShell>
   );
 }
@@ -113,6 +115,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   list: {
-    gap: 12,
+    gap: 6,
   },
 });

@@ -9,7 +9,7 @@ import {
   type StyleProp,
   type ViewStyle,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ThemedText } from "@/components/themed-text";
 import { useAppTheme } from "@/hooks/use-app-theme";
@@ -41,6 +41,7 @@ export function ScreenShell({
   children,
 }: ScreenShellProps) {
   const { colors } = useAppTheme();
+  const insets = useSafeAreaInsets();
 
   const header =
     title || subtitle || eyebrow || withBackButton || headerAccessory ? (
@@ -87,8 +88,11 @@ export function ScreenShell({
     ) : null;
 
   return (
-    <SafeAreaView
-      style={[styles.safeArea, { backgroundColor: colors.background }]}
+    <View
+      style={[
+        styles.safeArea,
+        { backgroundColor: colors.background, paddingTop: insets.top },
+      ]}
     >
       {scrollable ? (
         <ScrollView
@@ -107,7 +111,7 @@ export function ScreenShell({
           {children}
         </View>
       )}
-    </SafeAreaView>
+    </View>
   );
 }
 

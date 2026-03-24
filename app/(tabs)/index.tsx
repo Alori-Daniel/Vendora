@@ -12,9 +12,8 @@ import { ThemedView } from "@/components/themed-view";
 import { useAppTheme } from "@/hooks/use-app-theme";
 import { useDashboardQuery } from "@/hooks/use-workspace";
 import { useAppStore } from "@/stores/app-store";
-import { formatCurrency, formatShortDate } from "@/utils/formatters";
+import { formatCurrency } from "@/utils/formatters";
 import { radius, spacingY } from "@/utils/styling";
-import { getOrderStatusTone, getStatusLabel } from "@/utils/vendor-status";
 import { router } from "expo-router";
 
 const quickActionItems = [
@@ -46,6 +45,7 @@ const HomeScreen = () => {
   const dashboardQuery = useDashboardQuery();
   const dashboard = dashboardQuery.data?.dashboard;
   const recentOrders = dashboard?.recentOrders ?? [];
+  console.log("re", recentOrders);
 
   if (dashboardQuery.isPending) {
     return (
@@ -80,9 +80,10 @@ const HomeScreen = () => {
   return (
     <ScreenShell
       smallTitle={true}
+      // contentContainerStyle={{ borderWidth: 1 }}
       eyebrow={businessProfile?.business_category ?? "Vendor workspace"}
       subtitle="Here is your data-driven daily overview"
-      title={`Good morning, ${businessProfile?.business_name ?? "Vendor"}`}
+      title={`Good day, ${businessProfile?.business_name ?? "Vendor"}`}
     >
       <SurfaceCard tone="primary" verticalPadding={spacingY._10}>
         <View style={styles.heroHeader}>
@@ -169,7 +170,7 @@ const HomeScreen = () => {
         />
       </View>
 
-      <SurfaceCard>
+      <View>
         <View style={styles.sectionHeader}>
           <ThemedText variant="subtitle">Recent orders</ThemedText>
           <ThemedText
@@ -182,25 +183,24 @@ const HomeScreen = () => {
         </View>
         <View style={styles.stack}>
           {recentOrders.length > 0 ? (
-            recentOrders.map((order) => (
+            recentOrders.slice(0, 2).map((order) => (
               <ListRow
-                accessory={
-                  <StatusPill
-                    label={getStatusLabel(order.status)}
-                    tone={getOrderStatusTone(order.status)}
-                  />
-                }
+                // accessory={
+                //   <StatusPill
+                //     label={getStatusLabel(order.status)}
+                //     tone={getOrderStatusTone(order.status)}
+                //   />
+                // }
                 key={order.id}
-                meta={formatCurrency(order.balance)}
+                meta={formatCurrency(order.subtotal)}
                 onPress={() => router.push(`/orders/${order.id}`)}
-                subtitle={
-                  order.due_at
-                    ? `Due ${formatShortDate(order.due_at)}`
-                    : "No due date"
-                }
-                title={`${order.order_number} · ${
-                  order.customer?.full_name ?? "Walk-in customer"
-                }`}
+                // subtitle={
+                //   order.due_at
+                //     ? `Due ${formatShortDate(order.due_at)}`
+                //     : "No due date"
+                // }
+                subtitle={`${order.customer?.full_name ?? "Walk-in customer"}`}
+                title={`${order.order_number}`}
               />
             ))
           ) : (
@@ -209,9 +209,9 @@ const HomeScreen = () => {
             </ThemedText>
           )}
         </View>
-      </SurfaceCard>
+      </View>
 
-      <SurfaceCard>
+      {/* <SurfaceCard>
         <View style={styles.sectionHeader}>
           <ThemedText variant="subtitle">Startup checklist</ThemedText>
           <ThemedText variant="caption">
@@ -229,7 +229,7 @@ const HomeScreen = () => {
             </View>
           ))}
         </View>
-      </SurfaceCard>
+      </SurfaceCard> */}
     </ScreenShell>
   );
 };
@@ -286,13 +286,14 @@ const styles = StyleSheet.create({
   sectionHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
+    marginBottom: 8,
     gap: 12,
   },
   stack: {
     gap: 12,
   },
   link: {
-    fontWeight: "700",
+    fontWeight: "500",
   },
   checkItem: {
     alignItems: "center",

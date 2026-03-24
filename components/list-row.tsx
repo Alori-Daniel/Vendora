@@ -33,15 +33,24 @@ export function ListRow({
     <>
       <View style={styles.copy}>
         <ThemedText style={styles.title}>{title}</ThemedText>
-        {subtitle ? <ThemedText variant="caption">{subtitle}</ThemedText> : null}
+        {subtitle ? (
+          <ThemedText variant="caption">{subtitle}</ThemedText>
+        ) : null}
       </View>
-      {meta ? (
-        <ThemedText variant="caption" style={styles.meta}>
-          {meta}
-        </ThemedText>
-      ) : null}
-      {accessory}
-      {onPress ? <Ionicons color={colors.textMuted} name={icon} size={18} /> : null}
+
+      <View style={styles.accessoryContainer}>
+        {accessory}
+
+        {meta ? (
+          <ThemedText variant="label" style={styles.meta}>
+            {meta}
+          </ThemedText>
+        ) : null}
+      </View>
+
+      {/* {onPress ? (
+        <Ionicons color={colors.textMuted} name={icon} size={18} />
+      ) : null} */}
     </>
   );
 
@@ -50,7 +59,11 @@ export function ListRow({
       <Pressable
         accessibilityRole="button"
         onPress={onPress}
-        style={({ pressed }) => [styles.row, baseStyle, { opacity: pressed ? 0.84 : 1 }]}
+        style={({ pressed }) => [
+          styles.row,
+          baseStyle,
+          { opacity: pressed ? 0.84 : 1 },
+        ]}
       >
         {content}
       </Pressable>
@@ -63,7 +76,7 @@ export function ListRow({
 const styles = StyleSheet.create({
   row: {
     alignItems: "center",
-    borderRadius: radius._17,
+    borderRadius: radius._10,
     borderWidth: 1,
     flexDirection: "row",
     gap: spacingX._10,
@@ -78,6 +91,10 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   meta: {
-    textAlign: "right",
+    textAlign: "center",
+  },
+  accessoryContainer: {
+    alignItems: "center",
+    gap: spacingY._5,
   },
 });
