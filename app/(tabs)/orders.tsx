@@ -17,15 +17,10 @@ import { Ionicons } from "@expo/vector-icons";
 
 export default function OrdersScreen() {
   const ordersQuery = useOrdersQuery();
-  const orders = ordersQuery.data?.orders ?? [];
+  const orderRows = ordersQuery.data?.orders;
+  const orders = React.useMemo(() => orderRows ?? [], [orderRows]);
   const [selectedStatus, setSelectedStatus] = React.useState("all");
   const [searchQuery, setSearchQuery] = React.useState("");
-  const openOrders = orders.filter(
-    (order) => !["cancelled", "delivered"].includes(order.status),
-  ).length;
-  const unpaidOrders = orders.filter(
-    (order) => order.invoice && order.invoice.status !== "paid",
-  ).length;
   const { colors } = useAppTheme();
 
   const orderStatus = [
@@ -156,7 +151,7 @@ export default function OrdersScreen() {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{ flex: 1, borderWidth: 1 }}
+        style={{ flex: 1 }}
         contentContainerStyle={{ gap: 6 }}
       >
         {filteredOrders.length > 0 ? (
